@@ -1,61 +1,77 @@
-<!DOCTYPE html>
+<!DOCTYPE html
+Programa: Circulos se movendo
+Nome: Willian - Nº: 35 - Turma: 2B
+DESCRIÇÃO: Circulos se movimentam em direção um ao outro.>
 <html lang="pt-BR">
 <head>
-<title>Exemplo de arcos 2</title>
-<meta charset="UTF-8">
-<!-- Incício do Script do Canvas -->
-<script>
-function draw(){
-var canvas = document.getElementById('meuCanvas');
-if (canvas.getContext){
-var cntxt = canvas.getContext('2d');
-/*Exemplo de desenho com arc*/
-cntxt.beginPath();
-cntxt.fillStyle = "rgba(255, 0, 0, 1)";
-cntxt.arc(75, 75, 50, 0, Math.PI * 2, true);//Círculo exterior
-cntxt.fill();
-cntxt.moveTo(110, 75);
-cntxt.arc(75, 75, 35, 0, Math.PI, false);//Boca(sentido horário)
-cntxt.moveTo(65, 65);
-cntxt.arc(60, 65, 5, 0, Math.PI * 2, true);//Olho esquerdo
-cntxt.moveTo(95, 65);
-cntxt.arc(90, 65, 5, 0, Math.PI * 2, true);//Olho direito
-cntxt.stroke();
-cntxt.closePath();
-//Arco no sentido horário
-cntxt.beginPath();
-cntxt.arc(200, 75, 50, 0, Math.PI);
-cntxt.stroke();
-cntxt.closePath();
-//Arco no sentido anti-horário
-cntxt.beginPath();
-cntxt.arc(310, 75, 50, 0, Math.PI, true);
-cntxt.stroke();
-cntxt.closePath();
-//Corpo PacMan
-cntxt.beginPath();
-cntxt.fillStyle = "rgba(255, 255, 0, 0.7)";
-cntxt.moveTo(70, 205);
-cntxt.arc(70, 205, 50, 0.20*Math.PI, 1.8*Math.PI);
-cntxt.closePath();
-cntxt.stroke();
-cntxt.fill();
-//Olho PacMan
-cntxt.beginPath();
-cntxt.fillStyle = "rgb(0, 0, 0)";
-cntxt.arc(55, 180, 5, 0, 2*Math.PI);
-cntxt.fill();
-}
-}
-</script>
-<!-- Fim do Script do canvas-->
+    <title>Círculos se Movendo</title>
+    <meta charset="UTF-8">
+    <style>
+        canvas {
+            border: 1px solid #d3d3d3;
+            background-color: #A0A0A0;
+        }
+    </style>
+    <script type="text/javascript">
+        var circuloAmarelo, circuloAzul;
 
+        function startGame() {
+            circuloAmarelo = new component(25, "yellow", 0, 0);
+            circuloAzul = new component(25, "blue", 480, 270); 
+            myGameArea.start();
+        }
+
+        var myGameArea = {
+            canvas : document.createElement("canvas"),
+            start : function() {
+                this.canvas.width = 480;
+                this.canvas.height = 270;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.interval = setInterval(updateGameArea, 20);
+            },
+            clear : function() {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+
+        function component(radius, color, x, y) {
+            this.radius = radius;
+            this.color = color;
+            this.x = x;
+            this.y = y;
+            this.update = function() {
+                var ctx = myGameArea.context;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI); 
+                ctx.fillStyle = color;
+                ctx.fill();
+            };
+        }
+
+        function updateGameArea() {
+            myGameArea.clear();
+            circuloAmarelo.update();
+            circuloAmarelo.x += 2.4;
+            circuloAmarelo.y += 1.35;
+            circuloAzul.update();
+            circuloAzul.x -= 2.4;
+            circuloAzul.y -= 1.35;
+
+            if (yellowCircle.x >= 240 && yellowCircle.y >= 135) {
+                yellowCircle.x = 2.4;  
+                yellowCircle.y = -1.35;
+            }
+
+
+            if (blueCircle.x <= 240 && blueCircle.y <= 135) {
+                blueCircle.x = -2.4;
+                blueCircle.y = 1.35;
+            }
+
+        }
+    </script>
 </head>
-<body onload="draw();">
-<h1>Exemplos de arcos 2</h1>
-<div>
-<canvas id="meuCanvas" width="500" height="500" style="border:1px solid
-#000000; background-color: white;"></canvas>
-</div>
+<body onload="startGame();">
 </body>
 </html>
